@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        th, tr {
+            font-size: smaller;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="container">
+    <h1>计算T5最优数量</h1>
+    <div v-if="!showResult">
+        <div class="form-group" style="margin-top: 20px">
+            <label for="v">请输入需要的长度(单位米, 多个换行)</label>
+            <textarea v-model="arrString" rows="8" class="form-control" id="v"></textarea>
+        </div>
+        <div class="form-group" style="margin-top: 20px">
+            <label>请选择品牌</label><br/>
+            <div v-for="(brand, i) in brands" class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="brandOptions"
+                       :id="brand.id"
+                       :value="brand.id"
+                       v-model="currentBrandId">
+                {{brand.name}}
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 20px">
+            <label for="inputThreshold">请输入吊顶深度</label>
+            <input v-model="threshold" class="form-control" id="inputThreshold"/>
+        </div>
+        <button @click="calculate()" class="btn btn-primary btn-lg btn-block" style="margin-top: 20px">计算</button>
+    </div>
+
+    <div v-else>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">总长</th>
+                <th scope="col" v-for="(id, i) in ids">{{group[id].name}}</th>
+                <th scope="col">连接器</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, i) in data">
+                <th scope="row">{{item.totalLength}}</th>
+                <td v-for="(id, i) in ids">{{item.combination[id]}}</td>
+                <td>{{item.adapterCount}}</td>
+            </tr>
+            <tr>
+                <th scope="row">总计</th>
+                <td v-for="(id, i) in ids">{{group[id].count}}</td>
+                <td>{{adapterCount}}</td>
+            </tr>
+            <tr>
+                <th scope="row">费用</th>
+                <td colspan="6">
+                    <table class="table table-sm">
+                        <tr v-for="(id, i) in ids">
+                            <td>{{group[id].name}}</td>
+                            <td>共{{group[id].count}}个</td>
+                            <td>¥{{group[id].price}}</td>
+                        </tr>
+                        <tr>
+                            <td>连接器</td>
+                            <td>共{{adapterCount}}个</td>
+                            <td>¥{{adapterPrice}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">总费用</th>
+                <td colspan="6">{{totalPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button @click="reset()" class="btn btn-primary btn-lg btn-block">重新开始</button>
+    </div>
+    <p/>
+
+    <div v-if="showAlert" id="alertWarning" class="alert alert-danger" role="alert"
+         style="width: 100%; z-index: 999; position: fixed; top: 0px; right: 0px;">
+        {{alertMessage}}
+    </div>
+</div>
+<script src="js/axios.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
