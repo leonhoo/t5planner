@@ -14,6 +14,7 @@ new Vue({
         arrString: "", // 需要计算的长度, textarea中接收到的字符串
         arr: [], // 需要计算的长度, 已转换为请求参数
         threshold: 0.1, //默认0.1米的深度
+        combinations: [], //返回的组合列表数据
         ids: [], //获取的所有T5的ID
         group: [], // key是id, value是{ name:"", count:0, price:0 }
         adapterCount: 0, //连接器个数
@@ -77,6 +78,7 @@ new Vue({
                     _this.showResult = true;
                     _this.ids = [];
                     _this.group = [];
+                    _this.combinations = data;
                     _this.adapterCount = 0;
                     _this.adapterPrice = 0;
                     _this.totalPrice = 0;
